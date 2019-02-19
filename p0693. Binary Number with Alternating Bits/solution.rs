@@ -1,4 +1,5 @@
 impl Solution {
+    
     pub fn has_alternating_bits(n: i32) -> bool {
         let mut m = n;
         let mut last_bit = -1;
