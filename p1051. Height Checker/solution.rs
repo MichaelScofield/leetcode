@@ -3,12 +3,6 @@ impl Solution {
         let original = heights.clone();
         let heights = &mut { heights };
         heights.sort();
-        let mut n = 0;
-        for i in 0..original.len() {
-            if original[i] != heights[i] {
-                n += 1;
-            }
-        }
-        n
+        original.iter().zip(heights.iter()).filter(|(&i, &j)| i != j).count() as i32
     }
 }
