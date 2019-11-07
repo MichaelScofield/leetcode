@@ -3,7 +3,7 @@ impl Solution {
         use std::collections::HashMap;
         let mut occurrences = HashMap::new();
         for x in arr {
-            let occurrence = occurrences.entry(x).or_insert(1);
+            let occurrence = occurrences.entry(x).or_insert(0);
             *occurrence += 1;
         }
         use std::collections::HashSet;
