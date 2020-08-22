@@ -8,7 +8,7 @@ impl Solution {
         }
         let haystack_chars: Vec<char> = haystack.chars().collect();
         let needle_chars: Vec<char> = needle.chars().collect();
-        for p in 0..haystack_chars.len() - needle_chars.len() + 1 {
+        for mut p in 0..haystack_chars.len() - needle_chars.len() + 1 {
             let mut i = p;
             let mut j = 0;
             while haystack_chars[i] == needle_chars[j] {
@@ -18,6 +18,7 @@ impl Solution {
                     return p as i32;
                 }
             }
+            p += j;
         }
         -1
     }
