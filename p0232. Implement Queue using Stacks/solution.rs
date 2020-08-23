@@ -1,7 +1,6 @@
 struct MyQueue {
     pub stack: Vec<i32>,
     pub reverse_stack: Vec<i32>,
-    pub reverse_flag: bool,
 }
 
 impl MyQueue {
@@ -9,49 +8,40 @@ impl MyQueue {
         MyQueue {
             stack: Vec::<i32>::new(),
             reverse_stack: Vec::<i32>::new(),
-            reverse_flag: false
         }
     }
 
-    fn reverse(&mut self) {
-        if self.reverse_flag {
-            while let Some(v) = self.reverse_stack.pop() {
-                self.stack.push(v);
-            }
-        } else {
-            while let Some(v) = self.stack.pop() {
-                self.reverse_stack.push(v);
-            }
+    fn flush_stack(&mut self) {
+        while let Some(v) = self.stack.pop() {
+            self.reverse_stack.push(v);
         }
-        self.reverse_flag = !self.reverse_flag;
     }
 
     fn push(&mut self, x: i32) {
-        if self.reverse_flag {
-            self.reverse();
-        }
         self.stack.push(x)
     }
 
     fn pop(&mut self) -> i32 {
-        if !self.reverse_flag {
-            self.reverse();
+        match self.reverse_stack.pop() {
+            Some(e) => { e }
+            None => {
+                self.flush_stack();
+                self.reverse_stack.pop().unwrap()
+            }
         }
-        self.reverse_stack.pop().unwrap()
     }
 
     fn peek(&mut self) -> i32 {
-        if !self.reverse_flag {
-            self.reverse();
+        *match self.reverse_stack.last() {
+            Some(e) => { e }
+            None => {
+                self.flush_stack();
+                self.reverse_stack.last().unwrap()
+            }
         }
-        *self.reverse_stack.last().unwrap()
     }
 
     fn empty(&self) -> bool {
-        if self.reverse_flag {
-            self.reverse_stack.is_empty()
-        } else {
-            self.stack.is_empty()
-        }
+        self.reverse_stack.is_empty() && self.stack.is_empty()
     }
 }
