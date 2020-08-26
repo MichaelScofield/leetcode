@@ -1,27 +1,16 @@
 impl Solution {
     pub fn max_profit(prices: Vec<i32>) -> i32 {
-        if prices.len() < 1 {
+        if prices.len() == 0 {
             return 0;
         }
-        let mut min_price = (0, prices[0]);
-        let mut max_price = (0, prices[0]);
-        let mut max_profit = 0;
-        for i in 1..prices.len() {
-            let price = prices[i];
-            if price > prices[i - 1] {
-                max_profit += price - prices[i - 1];
-            }
-            if price < min_price.1 {
-                min_price = (i, price);
-            }
-            if price > max_price.1 {
-                max_price = (i, price);
-            }
+        let n = prices.len();
+        let mut dp = vec![vec![0, 0]; n + 1];
+        dp[0][0] = 0;
+        dp[0][1] = std::i32::MIN;
+        for x in 1..n + 1 {
+            dp[x][0] = std::cmp::max(dp[x - 1][0], dp[x - 1][1] + prices[x - 1]);
+            dp[x][1] = std::cmp::max(dp[x - 1][0] - prices[x - 1], dp[x - 1][1]);
         }
-        if max_price.0 > min_price.0 {
-            std::cmp::max(max_profit, max_price.1 - min_price.1)
-        } else {
-            max_profit
-        }
+        dp[n][0]
     }
 }
