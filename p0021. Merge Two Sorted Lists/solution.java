@@ -3,7 +3,9 @@
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode(int x) { val = x; }
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
 class Solution {
@@ -14,35 +16,23 @@ class Solution {
         if (l2 == null) {
             return l1;
         }
-        ListNode head = null;
-        ListNode last = null;
-        while (l1 != null || l2 != null) {
-            int v;
-            if (l1 == null) {
-                v = l2.val;
-                l2 = l2.next;
-            } else if (l2 == null) {
-                v = l1.val;
+        ListNode dummyHead = new ListNode(0);
+        ListNode curr = dummyHead;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                curr.next = l1;
                 l1 = l1.next;
             } else {
-                int v1 = l1.val;
-                int v2 = l2.val;
-                if (v1 < v2) {
-                    v = v1;
-                    l1 = l1.next;
-                } else {
-                    v = v2;
-                    l2 = l2.next;
-                }
+                curr.next = l2;
+                l2 = l2.next;
             }
-            ListNode current = new ListNode(v);
-            if (head == null) {
-                head = current;
-            } else {
-                last.next = current;
-            }
-            last = current;
+            curr = curr.next;
         }
-        return head;
+        if (l1 != null) {
+            curr.next = l1;
+        } else {
+            curr.next = l2;
+        }
+        return dummyHead.next;
     }
 }
