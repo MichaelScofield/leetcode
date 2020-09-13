@@ -4,14 +4,14 @@ impl Solution {
             return 0;
         }
         let n = nums.len();
-        let mut dp = vec![0; n];
-        let mut max = std::i32::MIN;
-        for i in 1..=n {
-            for j in 0..=n - i {
-                dp[j] = dp[j] + nums[j + i - 1];
-                max = std::cmp::max(max, dp[j]);
-            }
+        let mut dp = vec![vec![0; 2]; n];
+        dp[0][0] = nums[0];
+        dp[0][1] = std::i32::MIN;
+        for i in 1..n {
+            let num = nums[i];
+            dp[i][0] = std::cmp::max(dp[i - 1][0] + num, num);
+            dp[i][1] = std::cmp::max(dp[i - 1][0], dp[i - 1][1]);
         }
-        max
+        std::cmp::max(dp[n - 1][0], dp[n - 1][1])
     }
 }
