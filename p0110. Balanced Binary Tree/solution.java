@@ -4,27 +4,33 @@
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
     public boolean isBalanced(TreeNode root) {
-        if (root == null) {
-            return true;
-        }
-        if (Math.abs(maxDepth(root.left) - maxDepth(root.right)) > 1) {
-            return false;
-        }
-        return isBalanced(root.left) && isBalanced(root.right);
+        return isBalanced(root, new AtomicInteger(0));
     }
 
-    // https://github.com/MichaelScofield/leetcode/blob/master/p0104.%20Maximum%20Depth%20of%20Binary%20Tree/solution.java
-    private int maxDepth(TreeNode root) {
+    boolean isBalanced(TreeNode root, AtomicInteger depth) {
         if (root == null) {
-            return 0;
+            depth.set(0);
+            return true;
         }
-        int maxDepthL = maxDepth(root.left);
-        int maxDepthR = maxDepth(root.right);
-        return 1 + Math.max(maxDepthL, maxDepthR);
+        AtomicInteger leftDepth = new AtomicInteger(0);
+        AtomicInteger rightDepth = new AtomicInteger(0);
+        if (isBalanced(root.left, leftDepth) && isBalanced(root.right, rightDepth)) {
+            if (Math.abs(leftDepth.get() - rightDepth.get()) <= 1) {
+                depth.set(1 + Math.max(leftDepth.get(), rightDepth.get()));
+                return true;
+            }
+        }
+        return false;
     }
 }
